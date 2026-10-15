@@ -1,0 +1,56 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#10131b">
+<meta name="description" content="LinkSave: guarda enlaces de audio y descarga MP3 desde enlaces directos o una API compatible.">
+<title>LinkSave — Audio Downloader</title>
+<style>
+:root{color-scheme:dark;--bg:#0b0d12;--panel:#141823;--line:#272d3b;--text:#f4f6fb;--muted:#9ca6bb;--accent:#8b5cf6;--accent2:#22d3ee;--good:#34d399;--bad:#fb7185}
+*{box-sizing:border-box}body{margin:0;background:radial-gradient(900px 500px at 10% -10%,#30205d 0%,transparent 60%),radial-gradient(700px 400px at 110% 0%,#12394a 0%,transparent 55%),var(--bg);font-family:system-ui,-apple-system,Segoe UI,Roboto,sans-serif;color:var(--text);min-height:100vh;display:flex;justify-content:center;padding:24px 14px 36px}
+main{width:min(100%,680px)}.brand{display:flex;align-items:center;gap:12px;margin:8px 0 28px}.logo{width:46px;height:46px;border-radius:15px;display:grid;place-items:center;background:linear-gradient(135deg,var(--accent),var(--accent2));font-size:24px;font-weight:900;color:#fff;box-shadow:0 8px 28px #8b5cf633}.brand h1{font-size:25px;letter-spacing:-.7px;margin:0}.brand p{margin:2px 0 0;color:var(--muted);font-size:13px}.panel{background:#141823eF;border:1px solid var(--line);border-radius:22px;padding:22px;box-shadow:0 20px 70px #0005}.eyebrow{text-transform:uppercase;letter-spacing:1.5px;color:#c4b5fd;font-weight:800;font-size:11px}.panel h2{font-size:25px;line-height:1.2;letter-spacing:-.7px;margin:8px 0}.desc{color:var(--muted);line-height:1.55;font-size:14px;margin:0 0 20px}.label{display:block;font-size:13px;font-weight:700;margin:14px 0 8px}input,select{width:100%;min-height:48px;border:1px solid #343b4d;background:#0c0f16;color:var(--text);border-radius:12px;padding:12px 13px;font:inherit;outline:none}input:focus,select:focus{border-color:var(--accent);box-shadow:0 0 0 3px #8b5cf626}.row{display:grid;grid-template-columns:1fr;gap:10px}.btn{border:0;border-radius:12px;padding:14px 16px;min-height:48px;font:inherit;font-weight:800;cursor:pointer;background:linear-gradient(100deg,var(--accent),#6d5dfc);color:white;width:100%;margin-top:12px}.btn.secondary{background:#242a38;border:1px solid #3a4356;color:#e8ecf7}.btn:disabled{opacity:.55;cursor:wait}.status{display:none;margin-top:14px;border-radius:12px;padding:12px 13px;background:#0d111a;border:1px solid var(--line);font-size:13px;line-height:1.5;overflow-wrap:anywhere}.status.show{display:block}.status.good{border-color:#16634e;color:#a7f3d0}.status.bad{border-color:#713143;color:#fecdd3}.status a{color:#a5b4fc}.small{font-size:12px;color:var(--muted);line-height:1.55}.divider{height:1px;background:var(--line);margin:22px 0}.settings{margin-top:14px;border:1px solid var(--line);border-radius:14px;padding:13px}.settings summary{cursor:pointer;font-weight:700;font-size:13px}.settings p{font-size:12px;color:var(--muted);line-height:1.5}.footer{text-align:center;color:#778197;font-size:12px;padding:18px 8px}.pill{display:inline-block;border:1px solid #3b335f;background:#211a3c;color:#d8ccff;border-radius:99px;padding:5px 9px;font-size:11px;font-weight:700;margin-top:5px}
+@media(min-width:560px){body{padding-top:38px}.panel{padding:30px}.row.two{grid-template-columns:1fr 1fr}.brand h1{font-size:29px}}
+</style>
+</head>
+<body><main>
+<header class="brand"><div class="logo">↧</div><div><h1>LinkSave</h1><p>Audio en tu dispositivo, sin instalar apps</p><span class="pill">HTML · GitHub Pages · Android WebView</span></div></header>
+<section class="panel">
+<div class="eyebrow">Descargador de audio</div><h2>Convierte tu enlace a MP3</h2><p class="desc">Pega un enlace de audio directo o un enlace de una plataforma compatible. Para convertir enlaces de plataformas a MP3, configura una API de descarga que tengas permiso de utilizar.</p>
+<label class="label" for="source">Enlace del video o audio</label><input id="source" type="url" placeholder="https://…" autocomplete="url" inputmode="url">
+<div class="row two"><div><label class="label" for="format">Formato de audio</label><select id="format"><option value="mp3">MP3</option><option value="opus">Opus</option><option value="ogg">OGG</option><option value="wav">WAV</option><option value="best">Mejor disponible</option></select></div><div><label class="label" for="bitrate">Calidad</label><select id="bitrate"><option value="128">128 kbps</option><option value="192">192 kbps</option><option value="256">256 kbps</option><option value="320">320 kbps</option></select></div></div>
+<button class="btn" id="go">Preparar descarga</button><button class="btn secondary" id="open" type="button">Abrir enlace original</button>
+<div id="status" class="status" role="status" aria-live="polite"></div>
+<div class="divider"></div><p class="small"><b>Cómo funciona:</b> si pegas un enlace directo a un archivo de audio, LinkSave intenta abrirlo para descargarlo. Para extraer audio de YouTube u otras plataformas, el servidor/API debe realizar la conversión; GitHub Pages solo aloja el HTML y no convierte archivos por sí mismo.</p>
+<details class="settings"><summary>Configuración de API compatible (opcional)</summary><label class="label" for="api">URL base de la API</label><input id="api" type="url" placeholder="https://tu-api.example/" autocomplete="url"><p>Usa una API compatible con solicitudes POST JSON y con CORS habilitado para tu dominio de GitHub Pages. No uses una instancia pública sin permiso ni pongas claves privadas en este HTML: el código será visible para todos.</p><button class="btn secondary" id="saveApi" type="button">Guardar API en este dispositivo</button><p id="apiMsg"></p></details>
+</section><div class="footer">LinkSave · Utiliza únicamente contenido que tengas derecho a descargar.</div>
+</main>
+<script>
+const $=id=>document.getElementById(id);const status=$('status');
+function message(text,kind=''){status.className='status show '+kind;status.textContent='';status.append(document.createTextNode(text));}
+function validUrl(value){try{const u=new URL(value);return ['http:','https:'].includes(u.protocol)?u:null}catch{return null}}
+function apiBase(){return localStorage.getItem('linksave_api')||''}
+$('api').value=apiBase();
+$('saveApi').addEventListener('click',()=>{const v=$('api').value.trim();if(!v){localStorage.removeItem('linksave_api');$('apiMsg').textContent='API eliminada. Solo funcionarán los enlaces directos.';return}const u=validUrl(v);if(!u){$('apiMsg').textContent='Escribe una URL válida que empiece por https://';return}localStorage.setItem('linksave_api',u.href.replace(/\/$/,'')+'/');$('apiMsg').textContent='API guardada en este dispositivo.'});
+$('open').addEventListener('click',()=>{const u=validUrl($('source').value.trim());if(!u){message('Pega primero un enlace válido.','bad');return}window.open(u.href,'_blank','noopener,noreferrer')});
+$('go').addEventListener('click',async()=>{const source=$('source').value.trim();const u=validUrl(source);if(!u){message('Pega un enlace válido que empiece por https://','bad');return}const btn=$('go');btn.disabled=true;btn.textContent='Procesando…';try{
+ const api=apiBase();
+ if(api){
+  message('Conectando con la API configurada…');
+  const response=await fetch(api,{method:'POST',headers:{'Accept':'application/json','Content-Type':'application/json'},body:JSON.stringify({url:u.href,audioFormat:$('format').value,audioBitrate:$('bitrate').value,downloadMode:'audio',filenameStyle:'basic'})});
+  if(!response.ok)throw new Error('La API respondió HTTP '+response.status+'. Revisa la URL, permisos y configuración CORS.');
+  const data=await response.json();
+  if(data.status==='tunnel'||data.status==='redirect'){
+   const target=validUrl(data.url||'');if(!target)throw new Error('La API no devolvió un enlace de descarga válido.');
+   message('La descarga está lista. Pulsa el enlace para guardar el archivo.','good');const a=document.createElement('a');a.href=target.href;a.target='_blank';a.rel='noopener noreferrer';a.textContent='Descargar '+(data.filename||'audio');a.style.display='block';a.style.marginTop='10px';a.style.fontWeight='800';status.appendChild(a);return;
+  }
+  if(data.status==='picker'){message('El servicio devolvió varias opciones; esta versión de LinkSave aún no muestra selectores de archivos. Prueba un enlace individual.','bad');return}
+  if(data.status==='local-processing')throw new Error('Esta API requiere procesamiento adicional que el HTML no implementa. Usa una API que devuelva un enlace directo (redirect/tunnel).');
+  throw new Error(data.error?.code||'La API no pudo procesar este enlace.');
+ }
+ if(/\.(mp3|m4a|aac|ogg|opus|wav)(\?.*)?$/i.test(u.pathname+u.search)||/\.(mp3|m4a|aac|ogg|opus|wav)$/i.test(u.pathname)){
+  const a=document.createElement('a');a.href=u.href;a.target='_blank';a.rel='noopener noreferrer';a.download='audio.'+$('format').value;document.body.appendChild(a);a.click();a.remove();message('Se abrió el enlace de audio. Si el servidor no permite descarga directa, el navegador podría reproducirlo en lugar de guardarlo.','good');return;
+ }
+ message('Este enlace necesita una API de conversión. Abre “Configuración de API compatible” y añade una API autorizada con CORS habilitado; el HTML por sí solo no puede extraer el audio de esta plataforma.','bad');
+ }catch(err){message(err.message||'No se pudo procesar el enlace.','bad')}finally{btn.disabled=false;btn.textContent='Preparar descarga'}});
+</script></body></html>
